@@ -21,7 +21,7 @@ export default function Avatar({ data = {} }) {
     };
 
     return (
-        <div className="text-gray-600 flex-none">
+        <div className="text-gray-600 flex-none fade-in">
             <div className="
                 cursor-pointer transition
                 hover:opacity-50

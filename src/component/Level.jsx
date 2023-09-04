@@ -1,5 +1,7 @@
 export default function Level({level, children}) {
 
+    if (children.length < 1) return <></>;
+
     return (
         <>
             <div className="mt-3">
