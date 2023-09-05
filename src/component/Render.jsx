@@ -1,22 +1,33 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Avatar from "./Avatar";
 import Level from "./Level";
-import { useState } from 'react';
 import Button from './Button';
+import { useEffect, useRef, useState } from 'react';
 
 function Render({ data }) {
 
   // search box toggling hook
   const [search, setSearch] = useState(false);
+  const input_ref = useRef(null);
   // searching hook
   const [searchText, setSearchText] = useState('');
 
   const toggleSearch = () => {
+
     setSearch(prevSearch => prevSearch === false ? true : false);
+
   }
 
+  useEffect(() => {
+
+    input_ref.current?.focus();
+
+  }, [search])
+
   const searchContact = (event) => {
+
     setSearchText(event.target.value.toLowerCase());
+
   }
 
   let render = [];
@@ -25,8 +36,8 @@ function Render({ data }) {
   // filter the contacts put it in one level
   const filtered = data.filter(contact => {
 
-      let raw = JSON.stringify(contact).toLowerCase();
-      return raw.includes(searchText);
+    let raw = JSON.stringify(contact).toLowerCase();
+    return raw.includes(searchText);
 
   })
 
@@ -36,7 +47,9 @@ function Render({ data }) {
     let contacts = [];
     filtered.forEach(contact => {
       if (contact.level === level) {
+
         contacts.push(<Avatar key={contact.id} data={contact} />)
+
       }
     })
     render[level] = contacts;
@@ -63,13 +76,13 @@ function Render({ data }) {
           :
           <>
             <div className="flex w-full">
-              <input type="search"
+              <input ref={input_ref} type="search"
                 onChange={searchContact}
                 value={searchText} className="
                   scale-in-hor-right
                   block w-full py-2 px-4 me-2 text-sm text-gray-900
                   border border-gray-300 rounded-lg bg-stone-100
-                " placeholder="Search anything about your contacts!" required 
+                " placeholder="Search anything about your contacts!" required
               />
               <Button handleClick={toggleSearch}><i className="fa fa-close"></i></Button>
             </div>
