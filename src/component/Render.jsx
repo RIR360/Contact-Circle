@@ -2,6 +2,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Avatar from "./Avatar";
 import Level from "./Level";
 import Button from './Button';
+import Card from "./Card";
 import { useEffect, useRef, useState } from 'react';
 
 function Render({ data }) {
@@ -11,24 +12,37 @@ function Render({ data }) {
   const input_ref = useRef(null);
   // searching hook
   const [searchText, setSearchText] = useState('');
+  // modal opening hook
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalId, setmodalId] = useState(0);
+
+  const handleOpenModal = (id) => {
+
+    setIsModalOpen(true);
+    setmodalId(id);
+
+  };
+
+  const handleCloseModal = () => {
+
+    setIsModalOpen(false);
+
+  };
 
   const toggleSearch = () => {
 
+    // reset the input box text
+    setSearchText("");
     setSearch(prevSearch => prevSearch === false ? true : false);
 
   }
-
-  useEffect(() => {
-
-    input_ref.current?.focus();
-
-  }, [search])
 
   const searchContact = (event) => {
 
     setSearchText(event.target.value.toLowerCase());
 
   }
+
 
   let render = [];
   let levels = data.map(contact => contact.level);
@@ -48,13 +62,21 @@ function Render({ data }) {
     filtered.forEach(contact => {
       if (contact.level === level) {
 
-        contacts.push(<Avatar key={contact.id} data={contact} />)
+        contacts.push(<Avatar key={contact.id} data={contact} open={handleOpenModal} />)
 
       }
     })
     render[level] = contacts;
 
   });
+
+  // side effects
+
+  useEffect(() => {
+
+    input_ref.current?.focus();
+
+  }, [search])
 
   return (
     <div className="sm:w-1/2 mx-auto fade-in">
@@ -96,6 +118,10 @@ function Render({ data }) {
           <Level key={idx} level={idx}>{contacts}</Level>
         )}
       </div>
+
+      <Card isOpen={isModalOpen} data={
+        filtered.find(c => c.id === modalId)
+      } onClose={handleCloseModal} />
 
     </div>
   );

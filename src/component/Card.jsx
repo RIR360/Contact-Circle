@@ -1,4 +1,4 @@
-
+import Button from "./Button";
 import contact_image from "../images/contact.webp";
 
 export default function Card ({ isOpen, onClose, data = {} }) {
@@ -23,17 +23,15 @@ export default function Card ({ isOpen, onClose, data = {} }) {
                         <div className="font-bold text-orange-600">
                             <div className="text-xl">LEVEL {level ?? "0"}</div>
                         </div>
-                        <div>
-                            <button className="
-                                font-bold py-1 px-2 rounded
-                                text-red-600 text-xl transition
-                                hover:bg-red-600 hover:text-white
-                            " onClick={onClose}>
-                                <i className="fa fa-close"></i>
-                            </button>
+                        <div className="flex items-center">
+                            <Button ><i className="fa fa-pen"></i></Button>
+                            <Button ><i className="fa fa-trash text-red-600"></i></Button>
+                            <Button handleClick={onClose}>
+                                <i className="fa fa-close text-xl"></i>
+                            </Button>
                         </div>
                     </div>
-                    <div className="my-2">
+                    <div className="my-2 text-center">
                         <div className="flex justify-center">
                             <div className="
                                 rounded-full overflow-hidden
@@ -79,6 +77,9 @@ export default function Card ({ isOpen, onClose, data = {} }) {
                                 <p>No Email Provided</p>
                             )}
                         </div>
+                    </div>
+                    <div className="my-2 text-right text-gray-600">
+                        
                     </div>
                 </div>
             </div>
