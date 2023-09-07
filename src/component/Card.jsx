@@ -1,7 +1,7 @@
 import Button from "./Button";
 import contact_image from "../images/contact.webp";
 
-export default function Card ({ isOpen, onClose, data = {} }) {
+export default function Card ({ isOpen, onClose, onDelete, data = {} }) {
 
     if (!isOpen) return null;
 
@@ -25,7 +25,9 @@ export default function Card ({ isOpen, onClose, data = {} }) {
                         </div>
                         <div className="flex items-center">
                             <Button ><i className="fa fa-pen"></i></Button>
-                            <Button ><i className="fa fa-trash text-red-600"></i></Button>
+                            <Button handleClick={onDelete}>
+                                <i className="fa fa-trash text-red-600"></i
+                            ></Button>
                             <Button handleClick={onClose}>
                                 <i className="fa fa-close text-xl"></i>
                             </Button>
@@ -77,9 +79,6 @@ export default function Card ({ isOpen, onClose, data = {} }) {
                                 <p>No Email Provided</p>
                             )}
                         </div>
-                    </div>
-                    <div className="my-2 text-right text-gray-600">
-                        
                     </div>
                 </div>
             </div>

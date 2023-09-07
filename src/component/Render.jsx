@@ -4,8 +4,9 @@ import Level from "./Level";
 import Button from './Button';
 import Card from "./Card";
 import { useEffect, useRef, useState } from 'react';
+import { data } from "../data/contacts";
 
-function Render({ data }) {
+function Render() {
 
   // search box toggling hook
   const [search, setSearch] = useState(false);
@@ -70,8 +71,16 @@ function Render({ data }) {
 
   });
 
-  // side effects
+  // deleting contacts
+  function handleDelete(id) {
 
+    console.log("deleting", id);
+    // complete the deleting operation then close
+    handleCloseModal();
+
+  }
+
+  // side effects
   useEffect(() => {
 
     input_ref.current?.focus();
@@ -119,7 +128,8 @@ function Render({ data }) {
         )}
       </div>
 
-      <Card isOpen={isModalOpen} data={
+      <Card isOpen={isModalOpen} 
+          onDelete={() => handleDelete(modalId)} data={
         filtered.find(c => c.id === modalId)
       } onClose={handleCloseModal} />
 
