@@ -24,7 +24,6 @@ export default function Card ({ isOpen, onClose, onDelete, data = {} }) {
                             <div className="text-xl">LEVEL {level ?? "0"}</div>
                         </div>
                         <div className="flex items-center">
-                            <Button ><i className="fa fa-pen"></i></Button>
                             <Button handleClick={onDelete}>
                                 <i className="fa fa-trash text-red-600"></i
                             ></Button>
