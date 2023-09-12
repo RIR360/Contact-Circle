@@ -1,7 +1,7 @@
 import Button from "./Button";
 import contact_image from "../images/contact.webp";
 
-export default function Card ({ isOpen, onClose, onDelete, data = {} }) {
+export default function Card ({ id, isOpen, onClose, onDelete, data = {} }) {
 
     if (!isOpen) return null;
 

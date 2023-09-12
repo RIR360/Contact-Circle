@@ -4,26 +4,18 @@ import Level from "./Level";
 import Button from './Button';
 import Card from "./Card";
 import { useEffect, useRef, useState } from 'react';
-import { collection, getDocs } from "firebase/firestore";
-import database from '../lib/firebase';
-
+import { data } from "../data/contacts";
 
 function Render() {
 
-  // rendered data
-  const [render, setRender] = useState([]);
-
   // search box toggling hook
   const [search, setSearch] = useState(false);
-
-  // searching hook
   const input_ref = useRef(null);
+  // searching hook
   const [searchText, setSearchText] = useState('');
-
   // modal opening hook
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalId, setmodalId] = useState(0);
-
 
   const handleOpenModal = (id) => {
 
@@ -52,10 +44,38 @@ function Render() {
 
   }
 
+
+  let render = [];
+  let levels = data.map(contact => contact.level);
+
+  // filter the contacts put it in one level
+  const filtered = data.filter(contact => {
+
+    let raw = JSON.stringify(contact).toLowerCase();
+    return raw.includes(searchText);
+
+  })
+
+  // level the contacts
+  levels.forEach((level, idx) => {
+
+    let contacts = [];
+    filtered.forEach(contact => {
+      if (contact.level === level) {
+
+        contacts.push(<Avatar key={contact.id} data={contact} open={handleOpenModal} />)
+
+      }
+    })
+    render[level] = contacts;
+
+  });
+
   // deleting contacts
   function handleDelete(id) {
 
-    // successfull deletion
+    console.log("deleting", id);
+    // complete the deleting operation then close
     handleCloseModal();
 
   }
@@ -63,50 +83,9 @@ function Render() {
   // side effects
   useEffect(() => {
 
-    // focus the input box if it present
     input_ref.current?.focus();
 
-    getAvatars().then((data) => {
-
-      setRender(data);
-
-    });
-
   }, [search])
-
-  // getting avatars - load the data from firebase
-  const getAvatars = async () => {
-
-    const data = await getDocs(collection(database, "contacts"));
-
-    // find filtered data
-    let filtered = data.docs.map(doc => (
-      { ...doc.data(), id: doc.id }
-    ))
-
-    // level the data
-    let labeled = [];
-    // get the labels
-    [0, 1].forEach((level, idx) => {
-
-      let contacts = [];
-      filtered.forEach(contact => {
-        
-        if (contact.level === level) {
-
-          contacts.push(<Avatar key={contact.id} data={contact} open={handleOpenModal} />)
-
-        }
-      })
-
-      labeled[level] = contacts;
-
-    });
-
-
-    return labeled;
-
-  }
 
   return (
     <div className="sm:w-1/2 mx-auto fade-in">
@@ -145,18 +124,14 @@ function Render() {
 
       <div className="px-4 mb-4 overflow-auto">
         {render.map((contacts, idx) =>
-          <Level key={idx} level={idx}>
-            {contacts}
-          </Level>
+          <Level key={idx} level={idx}>{contacts}</Level>
         )}
       </div>
 
-      <Card   
-        isOpen={isModalOpen}
-        onDelete={() => handleDelete(modalId)} 
-        data={{}} 
-        onClose={handleCloseModal} 
-      />
+      <Card isOpen={isModalOpen} 
+          onDelete={() => handleDelete(modalId)} data={
+        filtered.find(c => c.id === modalId)
+      } onClose={handleCloseModal} />
 
     </div>
   );
