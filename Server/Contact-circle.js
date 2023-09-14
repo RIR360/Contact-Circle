@@ -10,6 +10,9 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 app.get("/", (req, res, next) => {
 
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
     res.status(200).json({
         "name": "contact-circle-api",
         "version": "1.0.0",
@@ -23,6 +26,9 @@ app.get("/contacts", (req, res, next) => {
 
     try {
 
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
         // process key
         const key = process.env.KEY;
         const key_requested = req.query.key;
@@ -32,7 +38,8 @@ app.get("/contacts", (req, res, next) => {
 
             return res.status(403).json({
                 code: 403,
-                message: "Access denied for wrong API KEY"
+                message: "rejected",
+                error: "Access denied for wrong API KEY"
             });
 
         }
@@ -41,11 +48,11 @@ app.get("/contacts", (req, res, next) => {
         fs.readFile("./data/contacts.json", (err, data) => {
 
             if (err) {
-    
+
                 next(err);
-    
+
             } else {
-    
+
                 // processing the data
                 const contacts = JSON.parse(data);
                 // filter is a string that should match in the contacts sending back
@@ -57,25 +64,31 @@ app.get("/contacts", (req, res, next) => {
 
                         let raw = JSON.stringify(contact).toLowerCase();
                         return raw.includes(filter);
-                    
+
                     })
 
-                    res.status(200).json(filtered_data);
+                    res.status(200).json({
+                        message: "success",
+                        data: labelData(filtered_data)
+                    });
 
                 } else {
 
-                    res.status(200).json(contacts);
+                    res.status(200).json({
+                        message: "success",
+                        data: labelData(contacts)
+                    });
 
                 }
-                
+
             }
-    
+
         })
-        
+
     } catch (err) {
 
         next(err);
-        
+
     }
 
 });
@@ -86,7 +99,8 @@ app.use((req, res, next) => {
     let error = new Error();
     res.status(404).json({
         code: 404,
-        message: "404 page not found"
+        message: "error",
+        error: "404 page not found"
     });
 
 });
@@ -100,10 +114,37 @@ app.use((err, req, res, next) => {
     // sending to the API
     res.status(500).json({
         code: 500,
-        message: String(err)
+        message: "error",
+        error: String(err)
     });
 
 });
+
+function labelData(data) {
+
+    const labeled_data = [];
+    const levels = [...new Set(data.map(contact => contact.level))];
+
+    levels.forEach((level) => {
+
+        let contacts = [];
+
+        data.forEach(contact => {
+
+            if (contact.level === level) {
+
+                contacts.push(contact)
+
+            }
+            
+        })
+        labeled_data[level] = contacts;
+
+    });
+
+    return labeled_data;
+
+}
 
 app.listen(port, () => {
 

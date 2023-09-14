@@ -5,6 +5,8 @@ export default function Card ({ id, isOpen, onClose, onDelete, data = {} }) {
 
     if (!isOpen) return null;
 
+    // load the data with id
+
     const { name, title, bio, phone, email, level } = data;
 
     return (

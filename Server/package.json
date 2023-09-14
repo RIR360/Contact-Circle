@@ -4,8 +4,8 @@
   "description": "api server for contact circle app",
   "main": "Contact-circle.js",
   "scripts": {
-    "start": "pm2 start Contact-circle.js",
-    "restart": "pm2 restart Contact-circle",
+    "start": "pm2 start Contact-circle.js && pm2 logs",
+    "restart": "pm2 restart Contact-circle && pm2 logs",
     "stop": "pm2 stop Contact-circle",
     "logs": "pm2 logs Contact-circle",
     "test": "echo \"Error: no test specified\" && exit 1"

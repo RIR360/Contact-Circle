@@ -1,6 +1,7 @@
-export default function Level({level, children}) {
+import Avatar from "./Avatar";
+export default function Level({level, opener, children}) {
 
-    if (children.length < 1) return <></>;
+    if (!children) return <></>;
 
     return (
         <>
@@ -12,7 +13,11 @@ export default function Level({level, children}) {
                 overflow-auto w-full transition 
                 border-l-4 hover:border-orange-600
             ">
-                {children}
+                {children.map((contact) =>
+
+                    <Avatar key={contact.id} data={contact} open={opener} />
+
+                )}
             </div>
         </>
     )

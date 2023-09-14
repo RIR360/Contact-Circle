@@ -1,13 +1,14 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Avatar from "./Avatar";
 import Level from "./Level";
 import Button from './Button';
 import Card from "./Card";
 import { useEffect, useRef, useState } from 'react';
-import { data } from "../data/contacts";
+import { SERVER, SERVER_KEY } from "../env"
 
 function Render() {
 
+  // render data
+  const [render, loadRender] = useState([]);
   // search box toggling hook
   const [search, setSearch] = useState(false);
   const input_ref = useRef(null);
@@ -15,12 +16,12 @@ function Render() {
   const [searchText, setSearchText] = useState('');
   // modal opening hook
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalId, setmodalId] = useState(0);
+  const [modalID, setmodalId] = useState('0');
 
-  const handleOpenModal = (id) => {
+  const handleOpenModal = (id, level) => {
 
     setIsModalOpen(true);
-    setmodalId(id);
+    setmodalId({id, level});
 
   };
 
@@ -44,33 +45,6 @@ function Render() {
 
   }
 
-
-  let render = [];
-  let levels = data.map(contact => contact.level);
-
-  // filter the contacts put it in one level
-  const filtered = data.filter(contact => {
-
-    let raw = JSON.stringify(contact).toLowerCase();
-    return raw.includes(searchText);
-
-  })
-
-  // level the contacts
-  levels.forEach((level, idx) => {
-
-    let contacts = [];
-    filtered.forEach(contact => {
-      if (contact.level === level) {
-
-        contacts.push(<Avatar key={contact.id} data={contact} open={handleOpenModal} />)
-
-      }
-    })
-    render[level] = contacts;
-
-  });
-
   // deleting contacts
   function handleDelete(id) {
 
@@ -80,12 +54,39 @@ function Render() {
 
   }
 
+  async function fetchData(filter) {
+
+    fetch(`${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`)
+      .then((response) => {
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        return response.json();
+
+      })
+      .then((json) => {
+
+        // load the data
+        loadRender(json.data);
+
+      })
+      .catch((error) => {
+
+        console.error('Fetch error:', error);
+
+      });
+  }
+
   // side effects
   useEffect(() => {
 
     input_ref.current?.focus();
 
-  }, [search])
+    fetchData(searchText);
+
+  }, [search, searchText])
 
   return (
     <div className="sm:w-1/2 mx-auto fade-in">
@@ -124,14 +125,18 @@ function Render() {
 
       <div className="px-4 mb-4 overflow-auto">
         {render.map((contacts, idx) =>
-          <Level key={idx} level={idx}>{contacts}</Level>
+          <Level key={idx} level={idx} opener={handleOpenModal}>
+            {contacts}
+          </Level>
         )}
       </div>
 
-      <Card isOpen={isModalOpen} 
-          onDelete={() => handleDelete(modalId)} data={
-        filtered.find(c => c.id === modalId)
-      } onClose={handleCloseModal} />
+      <Card
+        isOpen={isModalOpen}
+        onDelete={() => handleDelete(modalID)}
+        id={modalID}
+        onClose={handleCloseModal}
+      />
 
     </div>
   );
