@@ -4,6 +4,7 @@ import Button from './Button';
 import Card from "./Card";
 import { useEffect, useRef, useState } from 'react';
 import { SERVER, SERVER_KEY } from "../env"
+import Alert from './Alert';
 
 function Render() {
 
@@ -60,7 +61,7 @@ function Render() {
       .then((response) => {
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw response.json();
         }
 
         return response.json();
@@ -77,6 +78,7 @@ function Render() {
         console.error('Fetch error:', error);
 
       });
+      
   }
 
   // side effects
@@ -124,6 +126,7 @@ function Render() {
       </div>
 
       <div className="px-4 mb-4 overflow-auto">
+        {render.length <= 0 ? <Alert type={"failed"} message={"No Contacts Found!"} /> : ""}
         {render.map((contacts, idx) =>
           <Level key={idx} level={idx} opener={handleOpenModal}>
             {contacts}

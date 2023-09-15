@@ -1,13 +1,49 @@
 import Button from "./Button";
 import contact_image from "../images/contact.webp";
+import { useEffect, useState } from "react";
+import { SERVER, SERVER_KEY } from "../env"
 
-export default function Card ({ id, isOpen, onClose, onDelete, data = {} }) {
+export default function Card ({ id, isOpen, onClose, onDelete }) {
 
-    if (!isOpen) return null;
+    // data
+    const [data, setData] = useState({});
 
     // load the data with id
+    async function fetchData() {
+
+        fetch(`${SERVER}/contact?id=${id}&key=${SERVER_KEY}`)
+        .then((response) => {
+  
+          if (!response.ok) {
+            throw response.json();
+          }
+  
+          return response.json();
+  
+        })
+        .then((json) => {
+  
+          // load the data
+          setData(json.data);
+  
+        })
+        .catch((error) => {
+  
+          console.error('Fetch error:', error);
+  
+        });
+
+    }
+
+    useEffect(() => {
+        
+        fetchData();
+
+    })
 
     const { name, title, bio, phone, email, level } = data;
+
+    if (!isOpen) return null;
 
     return (
         <div className="

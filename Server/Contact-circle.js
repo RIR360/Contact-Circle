@@ -8,10 +8,16 @@ const port = process.env.PORT || 4001;
 
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
-app.get("/", (req, res, next) => {
+app.use((req, res, next) => {
 
-    res.setHeader('Content-Type', 'application/json');
+	res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+
+
+});
+
+app.get("/", (req, res, next) => {
 
     res.status(200).json({
         "name": "contact-circle-api",
@@ -25,9 +31,6 @@ app.get("/", (req, res, next) => {
 app.get("/contacts", (req, res, next) => {
 
     try {
-
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
 
         // process key
         const key = process.env.KEY;
