@@ -8,14 +8,65 @@ const port = process.env.PORT || 4001;
 
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
+// global middleware
 app.use((req, res, next) => {
 
-	res.setHeader('Content-Type', 'application/json');
+    // allowing CORS and json content globally 
+    res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 
 
 });
+
+// middleware
+function validateKey(req, res, next) {
+
+    const key = process.env.KEY;
+    const key_requested = req.query.key;
+
+    // reject the request if key doesn't match or not given
+    if (key !== key_requested) {
+
+        next({
+            code: 403,
+            message: "rejected",
+            error: "Access denied for wrong API KEY"
+        });
+
+    } else {
+
+        next();
+
+    }
+
+}
+
+function labelData(data) {
+
+    const labeled_data = [];
+    const levels = [...new Set(data.map(contact => contact.level))];
+
+    levels.forEach((level) => {
+
+        let contacts = [];
+
+        data.forEach(contact => {
+
+            if (contact.level === level) {
+
+                contacts.push(contact)
+
+            }
+
+        })
+        labeled_data[level] = contacts;
+
+    });
+
+    return labeled_data;
+
+}
 
 app.get("/", (req, res, next) => {
 
@@ -28,24 +79,9 @@ app.get("/", (req, res, next) => {
 
 });
 
-app.get("/contacts", (req, res, next) => {
+app.get("/contacts", validateKey, (req, res, next) => {
 
     try {
-
-        // process key
-        const key = process.env.KEY;
-        const key_requested = req.query.key;
-
-        // reject the request if key doesn't match or not given
-        if (key !== key_requested) {
-
-            return res.status(403).json({
-                code: 403,
-                message: "rejected",
-                error: "Access denied for wrong API KEY"
-            });
-
-        }
 
         // continue fetching contacts if not rejected already
         fs.readFile("./data/contacts.json", (err, data) => {
@@ -57,9 +93,12 @@ app.get("/contacts", (req, res, next) => {
             } else {
 
                 // processing the data
-                const contacts = JSON.parse(data);
+                let contacts = JSON.parse(data);
                 // filter is a string that should match in the contacts sending back
                 const filter = req.query.filter || "";
+
+                // proejct only name, level, id
+                // contacts = contacts.map(contact => {contact.id, contact.level, contact.name});
 
                 if (filter) {
 
@@ -96,10 +135,55 @@ app.get("/contacts", (req, res, next) => {
 
 });
 
+app.get("/contact", validateKey, (req, res, next) => {
+
+    try {
+
+        // continue fetching contacts if not rejected already
+        fs.readFile("./data/contacts.json", (err, data) => {
+
+            if (err) {
+
+                next(err);
+
+            } else {
+
+                // processing the data
+                const contacts = JSON.parse(data);
+                // find the contact with id
+                const id = req.query.id || "";
+                const contact = contacts.filter(contact => contact.id === id)
+
+                if (contact) {
+
+                    return res.status(200).json({
+                        message: "success", data: contact
+                    });
+
+                } else {
+
+                    next({
+                        code: 404,
+                        error: "No contacts found"
+                    });
+
+                }
+
+            }
+
+        })
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+});
+
 // 404 page not found middleware
 app.use((req, res, next) => {
 
-    let error = new Error();
     res.status(404).json({
         code: 404,
         message: "error",
@@ -115,39 +199,14 @@ app.use((err, req, res, next) => {
     console.error(err);
 
     // sending to the API
-    res.status(500).json({
-        code: 500,
+    let code = err.code || 500;
+    res.status(code).json({
+        code: code,
         message: "error",
-        error: String(err)
+        error: err.toString()
     });
 
 });
-
-function labelData(data) {
-
-    const labeled_data = [];
-    const levels = [...new Set(data.map(contact => contact.level))];
-
-    levels.forEach((level) => {
-
-        let contacts = [];
-
-        data.forEach(contact => {
-
-            if (contact.level === level) {
-
-                contacts.push(contact)
-
-            }
-            
-        })
-        labeled_data[level] = contacts;
-
-    });
-
-    return labeled_data;
-
-}
 
 app.listen(port, () => {
 

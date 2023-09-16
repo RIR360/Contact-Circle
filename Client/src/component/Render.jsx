@@ -1,13 +1,16 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Level from "./Level";
+import Alert from './Alert';
 import Button from './Button';
 import Card from "./Card";
+import Level from "./Level";
+import Loader from "./Loader";
 import { useEffect, useRef, useState } from 'react';
-import { SERVER, SERVER_KEY } from "../env"
-import Alert from './Alert';
+import { getContacts } from '../lib/fetcher';
 
 function Render() {
 
+  // loading state
+  const [isLoading, setIsLoading] = useState(true);
   // render data
   const [render, loadRender] = useState([]);
   // search box toggling hook
@@ -19,10 +22,10 @@ function Render() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalID, setmodalId] = useState('0');
 
-  const handleOpenModal = (id, level) => {
+  const handleOpenModal = (id) => {
 
     setIsModalOpen(true);
-    setmodalId({id, level});
+    setmodalId(id);
 
   };
 
@@ -55,42 +58,23 @@ function Render() {
 
   }
 
-  async function fetchData(filter) {
-
-    fetch(`${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`)
-      .then((response) => {
-
-        if (!response.ok) {
-          throw response.json();
-        }
-
-        return response.json();
-
-      })
-      .then((json) => {
-
-        // load the data
-        loadRender(json.data);
-
-      })
-      .catch((error) => {
-
-        console.error('Fetch error:', error);
-
-      });
-      
-  }
-
   // side effects
   useEffect(() => {
 
     input_ref.current?.focus();
 
-    fetchData(searchText);
+    getContacts(searchText)
+    .then(data => {
+      
+      loadRender(data);
+      setIsLoading(false);
+
+    })
 
   }, [search, searchText])
 
   return (
+
     <div className="sm:w-1/2 mx-auto fade-in">
 
       <div className="
@@ -125,23 +109,28 @@ function Render() {
 
       </div>
 
-      <div className="px-4 mb-4 overflow-auto">
-        {render.length <= 0 ? <Alert type={"failed"} message={"No Contacts Found!"} /> : ""}
-        {render.map((contacts, idx) =>
-          <Level key={idx} level={idx} opener={handleOpenModal}>
-            {contacts}
-          </Level>
-        )}
-      </div>
+      {isLoading ? <Loader></Loader> :
+        <div className="px-4 mb-4 overflow-auto fade-in">
+          {render.length <= 0 ? <Alert type={"failed"} message={"No Contacts Found!"} /> : ""}
+          {render.map((contacts, idx) =>
+            <Level key={idx} level={idx} opener={handleOpenModal}>
+              {contacts}
+            </Level>
+          )}
+        </div>
+      }
 
-      <Card
-        isOpen={isModalOpen}
-        onDelete={() => handleDelete(modalID)}
-        id={modalID}
-        onClose={handleCloseModal}
-      />
+      {isModalOpen ?
+        <Card
+          isOpen={isModalOpen}
+          onDelete={() => handleDelete(modalID)}
+          id={modalID}
+          onClose={handleCloseModal}
+        /> : <></>
+      }
 
     </div>
+
   );
 }
 

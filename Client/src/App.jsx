@@ -4,9 +4,7 @@ import Render from './component/Render';
 function App() {
 
   return (
-    <>
-      <Render/>
-    </>
+    <Render/>
   );
 }
 
