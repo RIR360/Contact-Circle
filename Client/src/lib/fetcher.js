@@ -1,79 +1,53 @@
 import { SERVER, SERVER_KEY } from "../env";
-
-// fetcher with Fetch API. callback: (data, error)
-async function fetcher(url) {
-
-    return new Promise((resolve, reject) => {
-
-        fetch(url).then((response) => {
-
-            if (!response.ok) {
-
-                throw response.json();
-
-            } else {
-
-                return response.json();
-
-            }
-
-        }).then((json) => {
-
-            // resolve the data
-            resolve(json.data);
-
-        }).catch((error) => {
-
-            // reject the error
-            reject(error);
-
-        });
-
-    })
-
-}
-
+import axios from "axios";
 
 export async function getContacts(filter) {
 
-    const url = `${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`;
+    try {
 
-    return new Promise((resolve, reject) => {
+        const url = `${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`;
+        const response = await axios.get(url);
+        return response.data.data;
+        
+    } catch (err) {
 
-        fetcher(url).then(data => {
-
-            resolve(data);
-
-        }).catch(err => {
-
-            console.log("Error while fetching data:", err);
-            // send empty array as no data found
-            resolve([]);
-
-        });
-
-    })
+        console.log("Error while fetching data:", err);
+        return [];
+        
+    }
 
 }
 
 export async function getContact(id) {
 
-    const url = `${SERVER}/contact?id=${id}&key=${SERVER_KEY}`;
+    try {
 
-    return new Promise((resolve) => {
+        const url = `${SERVER}/contact?id=${id}&key=${SERVER_KEY}`;
+        const response = await axios.get(url);
+        return response.data.data;
+        
+    } catch (err) {
 
-        fetcher(url).then(data => {
+        console.log("Error while fetching data:", err);
+        return {};
+        
+    }
 
-            resolve(data);
+}
 
-        }).catch(err => {
+export async function deleteContact(id) {
 
-            console.log("Error while fetching data:", err);
-            // send empty object as no data found
-            resolve({});
+    try {
 
-        });
+        const url = `${SERVER}/contact/delete?id=${id}&key=${SERVER_KEY}`;
+        const response = await axios.get(url);
+        return response.data;
+        
+    } catch (err) {
 
-    })
+        console.log("Error while deleting data:", err);
+        return false;
+        
+    }
 
 }

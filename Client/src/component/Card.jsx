@@ -19,7 +19,7 @@ export default function Card({ id, onClose, onDelete }) {
 
         });
 
-    })
+    }, [id, isLoading])
 
     const { name, title, bio, phone, email, level } = data;
 
@@ -44,8 +44,11 @@ export default function Card({ id, onClose, onDelete }) {
                         </div>
                         <div className="flex items-center">
                             <Button handleClick={onDelete}>
-                                <i className="fa fa-trash text-red-600"></i
-                                ></Button>
+                                <i className="fa fa-trash text-red-600"></i>
+                            </Button>
+                            <Button>
+                                <i className="fa fa-pen"></i>
+                            </Button>
                             <Button handleClick={onClose}>
                                 <i className="fa fa-close text-xl"></i>
                             </Button>

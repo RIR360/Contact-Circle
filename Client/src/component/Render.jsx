@@ -5,7 +5,7 @@ import Card from "./Card";
 import Level from "./Level";
 import Loader from "./Loader";
 import { useEffect, useRef, useState } from 'react';
-import { getContacts } from '../lib/fetcher';
+import { deleteContact, getContacts } from '../lib/fetcher';
 
 function Render() {
 
@@ -52,9 +52,15 @@ function Render() {
   // deleting contacts
   function handleDelete(id) {
 
-    console.log("deleting", id);
-    // complete the deleting operation then close
     handleCloseModal();
+    setIsLoading(true);
+    
+    deleteContact(id).then(data => {
+      
+      setIsLoading(false);
+      console.log(data);
+
+    })
 
   }
 
@@ -63,15 +69,14 @@ function Render() {
 
     input_ref.current?.focus();
 
-    getContacts(searchText)
-    .then(data => {
+    getContacts(searchText).then(data => {
       
       loadRender(data);
       setIsLoading(false);
 
     })
 
-  }, [search, searchText])
+  }, [search, searchText, isLoading])
 
   return (
 

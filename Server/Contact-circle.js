@@ -5,6 +5,8 @@ const fs = require("fs");
 // server setup
 const app = express();
 const port = process.env.PORT || 4001;
+// globals
+const DATA_FILE = "./data/contacts.json";
 
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
@@ -84,7 +86,7 @@ app.get("/contacts", validateKey, (req, res, next) => {
     try {
 
         // continue fetching contacts if not rejected already
-        fs.readFile("./data/contacts.json", (err, data) => {
+        fs.readFile(DATA_FILE, (err, data) => {
 
             if (err) {
 
@@ -140,7 +142,7 @@ app.get("/contact", validateKey, (req, res, next) => {
     try {
 
         // continue fetching contacts if not rejected already
-        fs.readFile("./data/contacts.json", (err, data) => {
+        fs.readFile(DATA_FILE, (err, data) => {
 
             if (err) {
 
@@ -168,6 +170,55 @@ app.get("/contact", validateKey, (req, res, next) => {
                     });
 
                 }
+
+            }
+
+        })
+
+    } catch (err) {
+
+        next(err);
+
+    }
+
+});
+
+app.get("/contact/delete", validateKey, (req, res, next) => {
+
+    try {
+
+        // continue fetching contacts if not rejected already
+        fs.readFile(DATA_FILE, (err, data) => {
+
+            if (err) {
+
+                next(err);
+
+            } else {
+
+                // find the contact with id
+                const id = req.query.id || "";
+                // processing the data
+                let contacts = JSON.parse(data);
+                contacts = contacts.filter(contact => contact.id !== id);
+
+                let new_data = JSON.stringify(contacts);
+
+                fs.writeFile(DATA_FILE, new_data, (err) => {
+
+                    if (err) next(err);
+                    else {
+
+                        return res.status(200).json({
+                            message: "success", data: {
+                                deletedCount: 1,
+                                deletedID: id
+                            }
+                        });
+
+                    }
+
+                })
 
             }
 
