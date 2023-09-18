@@ -54,9 +54,9 @@ function Render() {
 
     handleCloseModal();
     setIsLoading(true);
-    
+
     deleteContact(id).then(data => {
-      
+
       setIsLoading(false);
       console.log(data);
 
