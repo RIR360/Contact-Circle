@@ -3,51 +3,68 @@ import axios from "axios";
 
 export async function getContacts(filter) {
 
-    try {
+  try {
 
-        const url = `${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`;
-        const response = await axios.get(url);
-        return response.data.data;
-        
-    } catch (err) {
+    const url = `${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`;
+    const response = await axios.get(url);
+    return response.data.data;
 
-        console.log("Error while fetching data:", err);
-        return [];
-        
-    }
+  } catch (err) {
+
+    console.log("Error while fetching data:", err);
+    return [];
+
+  }
 
 }
 
 export async function getContact(id) {
 
-    try {
+  try {
 
-        const url = `${SERVER}/contact?id=${id}&key=${SERVER_KEY}`;
-        const response = await axios.get(url);
-        return response.data.data;
-        
-    } catch (err) {
+    const url = `${SERVER}/contact?id=${id}&key=${SERVER_KEY}`;
+    const response = await axios.get(url);
+    return response.data.data;
 
-        console.log("Error while fetching data:", err);
-        return {};
-        
-    }
+  } catch (err) {
+
+    console.log("Error while fetching data:", err);
+    return {};
+
+  }
 
 }
 
 export async function deleteContact(id) {
 
-    try {
+  try {
 
-        const url = `${SERVER}/contact/delete?id=${id}&key=${SERVER_KEY}`;
-        const response = await axios.get(url);
-        return response.data;
-        
-    } catch (err) {
+    const url = `${SERVER}/contact/delete?id=${id}&key=${SERVER_KEY}`;
+    const response = await axios.post(url);
+    return response.data;
 
-        console.log("Error while deleting data:", err);
-        return false;
-        
-    }
+  } catch (err) {
+
+    console.log("Error while deleting data:", err);
+    return false;
+
+  }
+
+}
+
+export async function updateContact(body) {
+
+  try {
+
+    const url = `${SERVER}/contact/update?key=${SERVER_KEY}`;
+    const response = await axios.post(url, body);
+    return response.data;
+
+  } catch (err) {
+
+    console.log("Error while updating data:", err);
+    return false;
+
+  }
 
 }
