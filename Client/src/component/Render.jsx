@@ -11,6 +11,8 @@ function Render() {
 
   // loading state
   const [isLoading, setIsLoading] = useState(true);
+  // deleting state
+  const [deleting, setDeleting] = useState(false);
   // render data
   const [render, loadRender] = useState([]);
   // search box toggling hook
@@ -52,13 +54,10 @@ function Render() {
   // deleting contacts
   function handleDelete(id) {
 
-    handleCloseModal();
-    setIsLoading(true);
-
     deleteContact(id).then(data => {
 
-      setIsLoading(false);
-      console.log(data);
+      setIsLoading(true);
+      handleCloseModal();
 
     })
 
@@ -114,7 +113,7 @@ function Render() {
 
       </div>
 
-      {isLoading ? <Loader></Loader> :
+      {isLoading ? <div><Loader className="text-3xl text-orange-600 my-4"></Loader></div> :
         <div className="px-4 mb-4 overflow-auto fade-in">
           {render.length <= 0 ? <Alert type={"failed"} message={"No Contacts Found!"} /> : ""}
           {render.map((contacts, idx) =>
