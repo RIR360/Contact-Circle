@@ -91,7 +91,7 @@ function Render() {
 
   return (
 
-    <div className="sm:w-1/2 mx-auto fade-in">
+    <div className="sm:w-1/2 mx-auto fade-in text-gray-600">
 
       <div className="
           sticky top-0 left-0 bg-white z-20

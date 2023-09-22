@@ -6,7 +6,7 @@ export default function Avatar({ open, data = {} }) {
     const { name, id } = data;
 
     return (
-        <div className="text-gray-600 flex-none fade-in">
+        <div className="flex-none fade-in">
             <div className="
                 cursor-pointer transition
                 hover:opacity-50
