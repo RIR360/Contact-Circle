@@ -46,24 +46,6 @@ export default function Card({ id, onClose, onDelete, className }) {
       `}>
         {isLoading ? <div><Loader className="text-3xl text-orange-600 my-4"></Loader></div> :
           <div>
-
-            <div className="pt-3 flex justify-between items-center text-sm">
-              <div className="font-bold text-orange-600">
-                <div className="text-xl">LEVEL {level ?? "0"}</div>
-              </div>
-              <div className="flex items-center">
-                <Button handleClick={onDelete}>
-                  <i className="fa fa-trash text-red-600"></i>
-                </Button>
-                <Button handleClick={onEdit}>
-                  <i className="fa fa-pen"></i>
-                </Button>
-                <Button handleClick={onClose}>
-                  <i className="fa fa-close text-xl"></i>
-                </Button>
-              </div>
-            </div>
-
             {editing ?
               <Formik
                 initialValues={data}
@@ -82,6 +64,28 @@ export default function Card({ id, onClose, onDelete, className }) {
                 }}
               >
                 <Form className={updating ? "animate-pulse" : ""}>
+
+                  <div className="pt-3 flex justify-between items-center text-sm">
+                    <div className="font-bold text-orange-600">
+                      <div className="text-xl">
+                        LEVEL
+                        <Field className="ml-2 w-16 font-bold"
+                          name="level" placeholder="1" type="number"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <Button handleClick={onDelete}>
+                        <i className="fa fa-trash text-red-600"></i>
+                      </Button>
+                      <Button handleClick={onEdit}>
+                        <i className="fa fa-pen"></i>
+                      </Button>
+                      <Button handleClick={onClose}>
+                        <i className="fa fa-close text-xl"></i>
+                      </Button>
+                    </div>
+                  </div>
 
                   <div className="text-center py-3">
                     <Button type="button" handleClick={onEdit} 
@@ -131,8 +135,28 @@ export default function Card({ id, onClose, onDelete, className }) {
 
                 </Form>
               </Formik>
+
               :
+              
               <div className="fade-in">
+                <div className="pt-3 flex justify-between items-center text-sm">
+                    <div className="font-bold text-orange-600">
+                      <div className="text-xl">
+                        LEVEL {level || 1}
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <Button handleClick={onDelete}>
+                        <i className="fa fa-trash text-red-600"></i>
+                      </Button>
+                      <Button handleClick={onEdit}>
+                        <i className="fa fa-pen"></i>
+                      </Button>
+                      <Button handleClick={onClose}>
+                        <i className="fa fa-close text-xl"></i>
+                      </Button>
+                    </div>
+                  </div>
                 <div className="my-2 text-center">
                   <div className="flex justify-center">
                     <div className="rounded-full overflow-hidden">
