@@ -2,6 +2,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import Alert from './Alert';
 import Button from './Button';
 import Card from "./Card";
+import CreateContact from "./CreateContact";
 import Level from "./Level";
 import Loader from "./Loader";
 import { useEffect, useRef, useState } from 'react';
@@ -11,8 +12,6 @@ function Render() {
 
   // loading state
   const [isLoading, setIsLoading] = useState(true);
-  // deleting state
-  const [deleting, setDeleting] = useState(false);
   // render data
   const [render, loadRender] = useState([]);
   // search box toggling hook
@@ -23,6 +22,8 @@ function Render() {
   // modal opening hook
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalID, setmodalId] = useState('0');
+  // creating state
+  const [isCreating, setCreating] = useState(false);
 
   const handleOpenModal = (id) => {
 
@@ -34,6 +35,9 @@ function Render() {
   const handleCloseModal = () => {
 
     setIsModalOpen(false);
+    setCreating(false);
+    // reload
+    setIsLoading(true);
 
   };
 
@@ -60,6 +64,14 @@ function Render() {
       handleCloseModal();
 
     })
+
+  }
+
+  function createContact() {
+
+    // load an empty editing card
+    setCreating(true);
+    setIsModalOpen(true);
 
   }
 
@@ -91,7 +103,7 @@ function Render() {
           <>
             <div className="text-lg fade-in">My Contact Circle</div>
             <div className="flex items-center">
-              <Button><i className="fa fa-add"></i></Button>
+              <Button handleClick={createContact}><i className="fa fa-add"></i></Button>
               <Button handleClick={toggleSearch}><i className="fa fa-search"></i></Button>
             </div>
           </>
@@ -125,12 +137,17 @@ function Render() {
       }
 
       {isModalOpen ?
-        <Card
-          isOpen={isModalOpen}
-          onDelete={() => handleDelete(modalID)}
-          id={modalID}
-          onClose={handleCloseModal}
-        /> : <></>
+        isCreating ?
+          <CreateContact
+            onClose={handleCloseModal}
+          /> 
+          : 
+          <Card
+            onDelete={() => handleDelete(modalID)}
+            id={modalID}
+            onClose={handleCloseModal}
+          /> 
+        : <></>
       }
 
     </div>
