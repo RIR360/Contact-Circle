@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const { v4: uuidv4 } = require('uuid');
 
 // server setup
 const app = express();
@@ -286,6 +287,58 @@ app.post("/contact/update", validateKey, (req, res, next) => {
           next(err);
 
         }
+      }
+
+    })
+
+  } catch (err) {
+
+    next(err);
+
+  }
+
+});
+
+app.post("/contact/upload", validateKey, (req, res, next) => {
+
+  try {
+
+    // continue fetching contacts if not rejected already
+    fs.readFile(DATA_FILE, (err, data) => {
+
+      if (err) {
+
+        next(err);
+
+      } else {
+
+        // processing the data
+        const contacts = JSON.parse(data);
+        
+        // generate a random ID
+        const id = uuidv4();
+        const new_contact = { id, ...req.body };
+
+        contacts.push(new_contact);
+
+        let new_data = JSON.stringify(contacts, null, 2);
+
+        fs.writeFile(DATA_FILE, new_data, (err) => {
+
+          if (err) next(err);
+          else {
+
+            return res.status(200).json({
+              message: "success", data: {
+                insertedCount: 1,
+                insertID: id
+              }
+            });
+
+          }
+
+        })
+
       }
 
     })
