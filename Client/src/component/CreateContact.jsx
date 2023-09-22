@@ -53,7 +53,7 @@ export default function CreateContact({ onClose, className }) {
                   <div className="text-xl">
                     LEVEL
                     <Field className="ml-2 w-16 font-bold"
-                      name="level" placeholder="1" type="number"
+                      name="level" placeholder="1" type="number" min="1"
                     />
                   </div>
                 </div>

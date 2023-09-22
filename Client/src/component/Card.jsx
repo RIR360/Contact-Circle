@@ -70,7 +70,7 @@ export default function Card({ id, onClose, onDelete, className }) {
                       <div className="text-xl">
                         LEVEL
                         <Field className="ml-2 w-16 font-bold"
-                          name="level" placeholder="1" type="number"
+                          name="level" placeholder="1" type="number" min="1"
                         />
                       </div>
                     </div>
@@ -142,7 +142,7 @@ export default function Card({ id, onClose, onDelete, className }) {
                 <div className="pt-3 flex justify-between items-center text-sm">
                     <div className="font-bold text-orange-600">
                       <div className="text-xl">
-                        LEVEL {level || 1}
+                        LEVEL {level ?? 1}
                       </div>
                     </div>
                     <div className="flex items-center">
