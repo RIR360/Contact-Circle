@@ -367,14 +367,9 @@ app.use((err, req, res, next) => {
 
   // logging to the console
   console.error(err);
-
   // sending to the API
   let code = err.code || 500;
-  res.status(code).json({
-    code: code,
-    message: "error",
-    error: err.toString()
-  });
+  res.status(code).json(err);
 
 });
 
