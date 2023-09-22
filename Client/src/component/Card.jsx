@@ -30,7 +30,7 @@ export default function Card({ id, onClose, onDelete, className }) {
 
   }, [id, isLoading])
 
-  const { name, title, bio, phone, email, level } = data;
+  const { name, title, bio, phone, email, level, locked } = data;
 
   return (
 
@@ -78,9 +78,11 @@ export default function Card({ id, onClose, onDelete, className }) {
                       <Button handleClick={onDelete}>
                         <i className="fa fa-trash text-red-600"></i>
                       </Button>
-                      <Button handleClick={onEdit}>
-                        <i className="fa fa-pen"></i>
-                      </Button>
+                      {!locked ? 
+                        <Button handleClick={onEdit}>
+                          <i className="fa fa-pen"></i>
+                        </Button> : <></>
+                      }
                       <Button handleClick={onClose}>
                         <i className="fa fa-close text-xl"></i>
                       </Button>
@@ -146,12 +148,17 @@ export default function Card({ id, onClose, onDelete, className }) {
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <Button handleClick={onDelete}>
-                        <i className="fa fa-trash text-red-600"></i>
-                      </Button>
-                      <Button handleClick={onEdit}>
-                        <i className="fa fa-pen"></i>
-                      </Button>
+                      {!locked ? 
+                        <>
+                          <Button handleClick={onDelete}>
+                            <i className="fa fa-trash text-red-600"></i>
+                          </Button>
+                          <Button handleClick={onEdit}>
+                            <i className="fa fa-pen"></i>
+                          </Button>
+                        </>
+                        : <></>
+                      }
                       <Button handleClick={onClose}>
                         <i className="fa fa-close text-xl"></i>
                       </Button>
