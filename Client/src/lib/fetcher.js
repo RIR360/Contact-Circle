@@ -68,3 +68,20 @@ export async function updateContact(body) {
   }
 
 }
+
+export async function uploadContact(body) {
+
+  try {
+
+    const url = `${SERVER}/contact/upload?key=${SERVER_KEY}`;
+    const response = await axios.post(url, body);
+    return response.data;
+
+  } catch (err) {
+
+    console.log("Error while uploading data:", err);
+    return false;
+
+  }
+
+}
