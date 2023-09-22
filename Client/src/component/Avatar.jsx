@@ -1,5 +1,5 @@
 
-import default_contact_image from "../images/contact.webp"
+import default_contact_image from "../images/contact.jpeg"
 
 export default function Avatar({ open, data = {} }) {
 

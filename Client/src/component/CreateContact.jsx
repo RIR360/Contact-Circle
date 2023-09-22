@@ -1,6 +1,6 @@
 import Button from "./Button";
 import Loader from "./Loader";
-import contact_image from "../images/contact.webp";
+import contact_image from "../images/contact.jpeg";
 import { useState } from "react";
 import { uploadContact } from "../lib/fetcher";
 import { Formik, Field, Form } from 'formik';
