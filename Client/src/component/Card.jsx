@@ -119,19 +119,19 @@ export default function Card({ id, onClose, onDelete, className }) {
                     <div className="mb-2">
                       <h3 className="text-l font-semibold">
                         <i className="fa fa-info-circle text-orange-600"></i> Bio</h3>
-                      <Field className="w-full" name="bio" as="textarea" placeholder="Person Bio" />
+                      <Field className="w-full bg-transparent" name="bio" as="textarea" placeholder="Person Bio" />
                     </div>
                     <div className="mb-2">
                       <h3 className="text-l font-semibold">
                         <i className="fa fa-phone text-orange-600"></i> Phone
                       </h3>
-                      <Field className="w-full" name="phone" placeholder="Person Phone" />
+                      <Field className="w-full bg-transparent" name="phone" placeholder="Person Phone" />
                     </div>
                     <div className="mb-2">
                       <h3 className="text-l font-semibold">
                         <i className="fa fa-envelope text-orange-600"></i> Email
                       </h3>
-                      <Field className="w-full" name="email" placeholder="Person Email" />
+                      <Field className="w-full bg-transparent" name="email" placeholder="Person Email" />
                     </div>
                   </div>
 
