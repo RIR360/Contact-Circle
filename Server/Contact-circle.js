@@ -1,8 +1,12 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const { v4: uuidv4 } = require('uuid');
+const db = require("./lib/database");
+
+// get environment variables
+dotenv.config();
 
 // server setup
 const app = express();
@@ -15,7 +19,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // use cors
 app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your frontend URL
+  origin: 'http://localhost:3000', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204,
