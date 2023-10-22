@@ -3,14 +3,14 @@ import default_contact_image from "../images/contact.jpeg"
 
 export default function Avatar({ open, data = {} }) {
 
-    const { name, id } = data;
+    const { name, _id } = data;
 
     return (
         <div className="flex-none fade-in">
             <div className="
                 cursor-pointer transition
                 hover:opacity-50
-            " onClick={() => open(id)}>
+            " onClick={() => open(_id)}>
                 <div className="flex justify-center">
                     <div className="
                         rounded-full overflow-hidden

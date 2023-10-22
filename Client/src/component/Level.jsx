@@ -15,7 +15,7 @@ export default function Level({level, opener, children}) {
             ">
                 {children.map((contact) =>
 
-                    <Avatar key={contact.id} data={contact} open={opener} />
+                    <Avatar key={contact._id} data={contact} open={opener} />
 
                 )}
             </div>

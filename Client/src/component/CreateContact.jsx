@@ -5,7 +5,7 @@ import { useState } from "react";
 import { uploadContact } from "../lib/fetcher";
 import { Formik, Field, Form } from 'formik';
 
-export default function CreateContact({ onClose, className }) {
+export default function CreateContact({ ownerCreating, onClose, className }) {
 
   // data
   const [uploading, setuploading] = useState(false);
@@ -26,7 +26,8 @@ export default function CreateContact({ onClose, className }) {
 
           <Formik
             initialValues={{
-              level: 1,
+              level: ownerCreating ? 0 : 1,
+              locked: ownerCreating ? 1 : 0,
               name: "",
               title: "",
               bio: "",
@@ -51,9 +52,15 @@ export default function CreateContact({ onClose, className }) {
               <div className="pt-3 flex justify-between items-center text-sm">
                 <div className="font-bold text-orange-600">
                   <div className="text-xl">
+                    { ownerCreating ? 
+                      <span className="mx-2">
+                        <i className="fa fa-user mr-2"></i>
+                      </span>
+                    : <></>
+                    }
                     LEVEL
                     <Field className="ml-2 w-16 font-bold"
-                      name="level" placeholder="1" type="number" min="1"
+                      name="level" placeholder="1" type="number" min="1" readOnly={ownerCreating}
                     />
                   </div>
                 </div>
@@ -65,7 +72,7 @@ export default function CreateContact({ onClose, className }) {
               </div>
 
               <div className="text-center py-3">
-                <Button type="submit" className="bg-orange-500 text-white" >
+                <Button type="submit" className="bg-orange-500 text-white text-sm">
                   {uploading ? <Loader className="mr-3"></Loader> :
                     <i className="fa fa-arrow-up mr-3"></i>
                   }
@@ -89,20 +96,21 @@ export default function CreateContact({ onClose, className }) {
                 <div className="mb-2">
                   <h3 className="text-l font-semibold">
                     <i className="fa fa-info-circle text-orange-600"></i> Bio</h3>
-                  <Field className="w-full bg-transparent" name="bio" as="textarea" placeholder="Person Bio" />
+                  <Field className="w-full bg-transparent my-2" name="bio" as="textarea" placeholder="Person Bio" />
                 </div>
                 <div className="mb-2">
                   <h3 className="text-l font-semibold">
                     <i className="fa fa-phone text-orange-600"></i> Phone
                   </h3>
-                  <Field className="w-full bg-transparent" name="phone" placeholder="Person Phone" />
+                  <Field className="w-full bg-transparent my-2" name="phone" placeholder="Person Phone" />
                 </div>
                 <div className="mb-2">
                   <h3 className="text-l font-semibold">
                     <i className="fa fa-envelope text-orange-600"></i> Email
                   </h3>
-                  <Field className="w-full bg-transparent" name="email" placeholder="Person Email" />
+                  <Field className="w-full bg-transparent my-2" name="email" placeholder="Person Email" />
                 </div>
+                <div className="hidden"><Field className="" name="locked" /></div>
               </div>
 
             </Form>

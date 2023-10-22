@@ -21,14 +21,16 @@ function Render() {
   const [searchText, setSearchText] = useState('');
   // modal opening hook
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalID, setmodalId] = useState('0');
+  const [modalID, setmodalId] = useState('');
   // creating state
   const [isCreating, setCreating] = useState(false);
+  // creating state
+  const [isCreatingOwner, setCreatingOwner] = useState(false);
 
-  const handleOpenModal = (id) => {
+  const handleOpenModal = (_id) => {
 
     setIsModalOpen(true);
-    setmodalId(id);
+    setmodalId(_id);
 
   };
 
@@ -36,6 +38,7 @@ function Render() {
 
     setIsModalOpen(false);
     setCreating(false);
+    setCreatingOwner(false);
     // reload
     setIsLoading(true);
 
@@ -56,9 +59,9 @@ function Render() {
   }
 
   // deleting contacts
-  function handleDelete(id) {
+  function handleDelete(_id) {
 
-    deleteContact(id).then(data => {
+    deleteContact(_id).then(() => {
 
       setIsLoading(true);
       handleCloseModal();
@@ -71,6 +74,15 @@ function Render() {
 
     // load an empty editing card
     setCreating(true);
+    setIsModalOpen(true);
+
+  }
+
+  function createOwner() {
+
+    // load an empty editing card
+    setCreating(true);
+    setCreatingOwner(true);
     setIsModalOpen(true);
 
   }
@@ -103,6 +115,11 @@ function Render() {
           <>
             <div className="text-lg fade-in">My Contact Circle</div>
             <div className="flex items-center">
+              { render.owner_exists ? <></> :
+                <Button handleClick={createOwner} className="bg-orange-500 text-white text">
+                  <i className="fa fa-user"></i>
+                </Button>
+              }
               <Button handleClick={createContact}><i className="fa fa-add"></i></Button>
               <Button handleClick={toggleSearch}><i className="fa fa-search"></i></Button>
             </div>
@@ -125,10 +142,10 @@ function Render() {
 
       </div>
 
-      {isLoading ? <div><Loader className="text-3xl text-orange-600 my-4"></Loader></div> :
+      {isLoading ? <div><Loader className="text-3xl text-orange-600 m-4"></Loader></div> :
         <div className="px-4 mb-4 overflow-auto fade-in">
-          {render.length <= 0 ? <Alert type={"failed"} message={"No Contacts Found!"} /> : ""}
-          {render.map((contacts, idx) =>
+          {render.data.length <= 0 ? <Alert type={"failed"} message={"No Contacts Found!"} /> : ""}
+          {render.data.map((contacts, idx) =>
             <Level key={idx} level={idx} opener={handleOpenModal}>
               {contacts}
             </Level>
@@ -140,11 +157,12 @@ function Render() {
         isCreating ?
           <CreateContact
             onClose={handleCloseModal}
+            ownerCreating={isCreatingOwner}
           /> 
           : 
           <Card
             onDelete={() => handleDelete(modalID)}
-            id={modalID}
+            _id={modalID}
             onClose={handleCloseModal}
           /> 
         : <></>

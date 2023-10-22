@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getContact, updateContact } from "../lib/fetcher";
 import { Formik, Field, Form } from 'formik';
 
-export default function Card({ id, onClose, onDelete, className }) {
+export default function Card({ _id, onClose, onDelete, className }) {
 
   // data
   const [data, setData] = useState([]);
@@ -21,14 +21,14 @@ export default function Card({ id, onClose, onDelete, className }) {
 
   useEffect(() => {
 
-    getContact(id).then(data => {
+    getContact(_id).then(data => {
 
       setData(data || []);
       setIsLoading(false);
 
     });
 
-  }, [id, isLoading])
+  }, [_id, isLoading])
 
   const { name, title, bio, phone, email, level, locked } = data;
 
@@ -71,18 +71,20 @@ export default function Card({ id, onClose, onDelete, className }) {
                         LEVEL
                         <Field className="ml-2 w-16 font-bold"
                           name="level" placeholder="1" type="number" min="1"
+                          disabled={ locked ? "disabled" : "" }
                         />
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <Button handleClick={onDelete}>
-                        <i className="fa fa-trash text-red-600"></i>
-                      </Button>
                       {!locked ? 
-                        <Button handleClick={onEdit}>
-                          <i className="fa fa-pen"></i>
-                        </Button> : <></>
+                        <Button handleClick={onDelete}>
+                          <i className="fa fa-trash text-red-600"></i>
+                        </Button>
+                        : <></>
                       }
+                      <Button handleClick={onEdit}>
+                        <i className="fa fa-pen"></i>
+                      </Button> 
                       <Button handleClick={onClose}>
                         <i className="fa fa-close text-xl"></i>
                       </Button>
@@ -91,11 +93,11 @@ export default function Card({ id, onClose, onDelete, className }) {
 
                   <div className="text-center py-3">
                     <Button type="button" handleClick={onEdit} 
-                    className="bg-gray-500 text-white mr-3">
+                    className="bg-gray-500 text-white mr-3 text-sm">
                       <i className="fa fa-cancel mr-3"></i>
                       <span>Cancel</span>
                     </Button>
-                    <Button type="submit" className="bg-orange-500 text-white" >
+                    <Button type="submit" className="bg-orange-500 text-white text-sm" >
                       {updating ? <Loader className="mr-3"></Loader> :
                         <i className="fa fa-arrow-up mr-3"></i>
                       }
@@ -119,19 +121,19 @@ export default function Card({ id, onClose, onDelete, className }) {
                     <div className="mb-2">
                       <h3 className="text-l font-semibold">
                         <i className="fa fa-info-circle text-orange-600"></i> Bio</h3>
-                      <Field className="w-full bg-transparent" name="bio" as="textarea" placeholder="Person Bio" />
+                      <Field className="w-full bg-transparent my-2" name="bio" as="textarea" placeholder="Person Bio" />
                     </div>
                     <div className="mb-2">
                       <h3 className="text-l font-semibold">
                         <i className="fa fa-phone text-orange-600"></i> Phone
                       </h3>
-                      <Field className="w-full bg-transparent" name="phone" placeholder="Person Phone" />
+                      <Field className="w-full bg-transparent my-2" name="phone" placeholder="Person Phone" />
                     </div>
                     <div className="mb-2">
                       <h3 className="text-l font-semibold">
                         <i className="fa fa-envelope text-orange-600"></i> Email
                       </h3>
-                      <Field className="w-full bg-transparent" name="email" placeholder="Person Email" />
+                      <Field className="w-full bg-transparent my-2" name="email" placeholder="Person Email" />
                     </div>
                   </div>
 
@@ -149,16 +151,14 @@ export default function Card({ id, onClose, onDelete, className }) {
                     </div>
                     <div className="flex items-center">
                       {!locked ? 
-                        <>
-                          <Button handleClick={onDelete}>
-                            <i className="fa fa-trash text-red-600"></i>
-                          </Button>
-                          <Button handleClick={onEdit}>
-                            <i className="fa fa-pen"></i>
-                          </Button>
-                        </>
+                        <Button handleClick={onDelete}>
+                          <i className="fa fa-trash text-red-600"></i>
+                        </Button>
                         : <></>
                       }
+                      <Button handleClick={onEdit}>
+                            <i className="fa fa-pen"></i>
+                          </Button>
                       <Button handleClick={onClose}>
                         <i className="fa fa-close text-xl"></i>
                       </Button>
@@ -181,19 +181,19 @@ export default function Card({ id, onClose, onDelete, className }) {
                     <h3 className="text-l font-semibold">
                       <i className="fa fa-info-circle text-orange-600"></i> Bio
                     </h3>
-                    <p>{bio || "No Information Provided"}</p>
+                    <p className="py-2">{bio || "No Information Provided"}</p>
                   </div>
                   <div className="mb-2">
                     <h3 className="text-l font-semibold">
                       <i className="fa fa-phone text-orange-600"></i> Phone
                     </h3>
-                    <p>{phone}</p>
+                    <p className="py-2">{phone}</p>
                   </div>
                   <div className="mb-2">
                     <h3 className="text-l font-semibold">
                       <i className="fa fa-envelope text-orange-600"></i> Email
                     </h3>
-                    <p>{email}</p>
+                    <p className="py-2">{email}</p>
                   </div>
                 </div>
               </div>
