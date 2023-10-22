@@ -5,6 +5,7 @@
   "main": "Contact-circle.js",
   "scripts": {
     "start": "pm2 start Contact-circle.js && pm2 logs",
+    "dev": "pm2 start Contact-circle.js --watch && pm2 logs",
     "restart": "pm2 restart Contact-circle && pm2 logs",
     "stop": "pm2 stop Contact-circle",
     "logs": "pm2 logs Contact-circle",
