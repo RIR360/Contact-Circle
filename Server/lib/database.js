@@ -2,13 +2,13 @@ const dotenv = require("dotenv");
 const mongoose = require('mongoose');
 
 // get environment variables
-dotenv.config();
+dotenv.config(); 
 
 // Connect to your MongoDB database
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}); 
 
 // Get the default connection
 const db = mongoose.connection;
