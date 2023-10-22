@@ -7,11 +7,11 @@ export async function getContacts(filter) {
 
     const url = `${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`;
     const response = await axios.get(url);
-    return response.data.data;
+    return response.data;
 
   } catch (err) {
 
-    console.log("Error while fetching data:", err);
+    console.log("Error while fetching data:", err.message);
     return [];
 
   }
@@ -22,13 +22,13 @@ export async function getContact(id) {
 
   try {
 
-    const url = `${SERVER}/contact?id=${id}&key=${SERVER_KEY}`;
+    const url = `${SERVER}/contact?_id=${id}&key=${SERVER_KEY}`;
     const response = await axios.get(url);
     return response.data.data;
 
   } catch (err) {
 
-    console.log("Error while fetching data:", err);
+    console.log("Error while fetching data:", err.message);
     return {};
 
   }
@@ -39,13 +39,13 @@ export async function deleteContact(id) {
 
   try {
 
-    const url = `${SERVER}/contact/delete?id=${id}&key=${SERVER_KEY}`;
+    const url = `${SERVER}/contact/delete?_id=${id}&key=${SERVER_KEY}`;
     const response = await axios.post(url);
     return response.data;
 
   } catch (err) {
 
-    console.log("Error while deleting data:", err);
+    console.log("Error while deleting data:", err.message);
     return false;
 
   }
@@ -62,7 +62,7 @@ export async function updateContact(body) {
 
   } catch (err) {
 
-    console.log("Error while updating data:", err);
+    console.log("Error while updating data:", err.message);
     return false;
 
   }
@@ -79,7 +79,7 @@ export async function uploadContact(body) {
 
   } catch (err) {
 
-    console.log("Error while uploading data:", err);
+    console.log("Error while uploading data:", err.message);
     return false;
 
   }
