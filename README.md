@@ -59,7 +59,7 @@ Contributions are welcome! If you'd like to contribute to Contact Circle, please
 - Submit a pull request.
 
 ## License
-This project is licensed under the *MIT License*.
+This project is licensed under the [MIT License](https://github.com/RIR360/Contact-Circle/blob/main/LICENSE). 
 
 
    
