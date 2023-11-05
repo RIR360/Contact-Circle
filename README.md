@@ -57,11 +57,7 @@ To run this project locally, follow these steps:
 6. Open your web browser and go to **http://localhost:3000** to use Contact Circle.
 
 ## Contributing
-Contributions are welcome! If you'd like to contribute to Contact Circle, please follow these guidelines:
-- Fork the repository.
-- Create a new branch for your feature or bug fix.
-- Commit your changes and push to your branch.
-- Submit a pull request.
+Check out the [contributing guidelines](https://github.com/RIR360/Contact-Circle/blob/main/CONTRIBUTING.md)
 
 ## License
 This project is licensed under the [MIT License](https://github.com/RIR360/Contact-Circle/blob/main/LICENSE). 
