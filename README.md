@@ -20,10 +20,10 @@ Contact Circle is a simple contact app that allows you to list your contacts bas
 ## API Endpoints
 
 - GET /api/contacts: Get a list of all contacts.
-- GET /api/contacts/:id: Get a specific contact by ID.
-- POST /api/contacts: Create a new contact.
-- PUT /api/contacts/:id: Update an existing contact.
-- DELETE /api/contacts/:id: Delete a contact.
+- GET /api/contact: Get a specific contact.
+- POST /api/contact/upload: Create a new contact.
+- POST /api/contact/update: Update a contact.
+- POST /api/contact/delete: Delete a contact.
 
 ## Installation
 
@@ -37,19 +37,24 @@ To run this project locally, follow these steps:
    ```bash
    cd Contact-Circle
 
-3. Install server dependencies and start:
+3. Update Environment Variable files:
+   ```bash
+   /Server/.env
+   /Client/src/env.js
+
+4. Install server dependencies and start:
    ```bash
    cd Server
    npm install
    npm start
    
-4. Install client dependencies and start:
+5. Install client dependencies and start:
    ```bash
    cd Cerver
    npm install
    npm start
 
-5. Open your web browser and go to **http://localhost:3000** to use Contact Circle.
+6. Open your web browser and go to **http://localhost:3000** to use Contact Circle.
 
 ## Contributing
 Contributions are welcome! If you'd like to contribute to Contact Circle, please follow these guidelines:
