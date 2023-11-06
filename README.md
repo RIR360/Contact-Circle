@@ -1,3 +1,5 @@
+![Contact circle MERN app preview made by Rejwan Islam Rizvy, Rizvi](https://github.com/RIR360/Contact-Circle/assets/50569315/60f13e4e-2412-43da-902d-ef8e74491f87)
+
 # Contact Circle
 
 Contact Circle is a simple contact app that allows you to list your contacts based on the closeness of the people in your life. This project serves as a demonstration of a Node.js application showcasing the MERN (MongoDB, Express.js, React, Node.js) architecture and how to build a RESTful API server.
@@ -16,6 +18,7 @@ Contact Circle is a simple contact app that allows you to list your contacts bas
 - **Express.js**: A Node.js web application framework for building the API server.
 - **React**: Front-end library for creating interactive and dynamic user interfaces.
 - **Node.js**: Server runtime for building the back-end of the application.
+- **And More**: Axios, Cors, Formik, Mongoose, PM2, Tailwind, Animista, Font Awesome
 
 ## API Endpoints
 
