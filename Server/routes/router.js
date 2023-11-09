@@ -187,8 +187,19 @@ app.post("/contact/upload", validateKey, async (req, res, next) => {
     })
     .catch((error) => {
 
-      console.error('Error saving data:', error);
-      next(error);
+      if (error.code === 11000) {
+
+        return res.status(500).json({
+          message: "error", info: "A contact with this name may already exists!"
+        });
+
+      } else {
+
+        console.error('Error saving data:', error);
+        next(error);
+
+      }
+
 
     });
 
