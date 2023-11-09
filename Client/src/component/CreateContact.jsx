@@ -5,7 +5,7 @@ import { useState } from "react";
 import { uploadContact } from "../lib/fetcher";
 import { Formik, Field, Form } from 'formik';
 
-export default function CreateContact({ ownerCreating, onClose, className }) {
+export default function CreateContact({ ownerCreating, onClose, toast, className }) {
 
   // data
   const [uploading, setuploading] = useState(false);
@@ -38,12 +38,23 @@ export default function CreateContact({ ownerCreating, onClose, className }) {
 
               setuploading(true);
 
-              uploadContact(values).then(() => {
+              uploadContact(values).then((data) => {
 
                 setuploading(false);
                 onClose();
 
-              });
+                if (data.status === "failed") {
+
+                  toast("error", data.err.response.data?.info.toString());
+
+                } else {
+
+                  toast("success", "New contact has been created successfully!");
+
+                }
+
+
+              })
 
             }}
           >

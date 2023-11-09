@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { getContact, updateContact } from "../lib/fetcher";
 import { Formik, Field, Form } from 'formik';
 
-export default function Card({ _id, onClose, onDelete, className }) {
+export default function Card({ _id, onClose, onDelete, toast, className }) {
 
   // data
   const [data, setData] = useState([]);
@@ -26,6 +26,10 @@ export default function Card({ _id, onClose, onDelete, className }) {
       setData(data || []);
       setIsLoading(false);
 
+    }).catch(err => {
+
+      toast("error", err);
+
     });
 
   }, [_id, isLoading])
@@ -37,7 +41,7 @@ export default function Card({ _id, onClose, onDelete, className }) {
     <div className={`
       fixed flex top-0 left-0 bg-gray-200
       h-screen w-screen justify-center align-center
-      px-4 z-50
+      px-4 z-30
     `}>
       <div className={`
         w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 overflow-auto
@@ -58,6 +62,11 @@ export default function Card({ _id, onClose, onDelete, className }) {
                     setUpdating(false);
                     setEditing(false);
                     setIsLoading(true);
+                    toast("success", "A contact has been updated successfully!");
+
+                  }).catch(err => {
+
+                    toast("error", err);
 
                   });
 

@@ -7,6 +7,7 @@ import Level from "./Level";
 import Loader from "./Loader";
 import { useEffect, useRef, useState } from 'react';
 import { deleteContact, getContacts } from '../lib/fetcher';
+import Toast from './Toast';
 
 function Render() {
 
@@ -26,6 +27,16 @@ function Render() {
   const [isCreating, setCreating] = useState(false);
   // creating state
   const [isCreatingOwner, setCreatingOwner] = useState(false);
+  // toast messages
+  const [showToast, setShowToast] = useState(false);
+  const [toast_info, setToast] = useState({});
+
+  const toggleToast = (type, text) => {
+
+    setShowToast(true);
+    setToast({ type, text });
+
+  }
 
   const handleOpenModal = (_id) => {
 
@@ -65,6 +76,11 @@ function Render() {
 
       setIsLoading(true);
       handleCloseModal();
+      toggleToast("success", "A contact has been deleted successfully!");
+
+    }).catch(err => {
+
+      toggleToast("error", err.toString());
 
     })
 
@@ -96,6 +112,10 @@ function Render() {
       
       loadRender(data);
       setIsLoading(false);
+
+    }).catch(err => {
+
+      toggleToast("error", err.toString());
 
     })
 
@@ -158,15 +178,24 @@ function Render() {
           <CreateContact
             onClose={handleCloseModal}
             ownerCreating={isCreatingOwner}
+            toast={toggleToast}
           /> 
           : 
           <Card
             onDelete={() => handleDelete(modalID)}
             _id={modalID}
             onClose={handleCloseModal}
+            toast={toggleToast}
           /> 
         : <></>
       }
+
+      <Toast
+        type={toast_info.type}
+        message={toast_info.text}
+        showToast={showToast}
+        setShowToast={setShowToast}
+      />
 
     </div>
 
