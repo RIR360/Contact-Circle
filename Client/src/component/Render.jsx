@@ -72,17 +72,22 @@ function Render() {
   // deleting contacts
   function handleDelete(_id) {
 
-    deleteContact(_id).then(() => {
+    deleteContact(_id).then((data) => {
 
       setIsLoading(true);
       handleCloseModal();
-      toggleToast("success", "A contact has been deleted successfully!");
+      
+      if (data.status === "failed") {
 
-    }).catch(err => {
+        toggleToast("error", data.err.toString());
 
-      toggleToast("error", err.toString());
+      } else {
 
-    })
+        toggleToast("success", "A contact has been deleted successfully!");
+
+      }
+
+    });
 
   }
 
@@ -113,11 +118,13 @@ function Render() {
       loadRender(data);
       setIsLoading(false);
 
-    }).catch(err => {
+      if (data.status === "failed") {
 
-      toggleToast("error", err.toString());
+        toggleToast("error", data.err.toString());
 
-    })
+      }
+
+    });
 
   }, [search, searchText, isLoading])
 
