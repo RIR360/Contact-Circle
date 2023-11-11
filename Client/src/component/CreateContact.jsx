@@ -53,7 +53,6 @@ export default function CreateContact({ ownerCreating, onClose, toast, className
 
                 }
 
-
               })
 
             }}
@@ -131,6 +130,5 @@ export default function CreateContact({ ownerCreating, onClose, toast, className
     </div>
 
   )
-
 
 }
