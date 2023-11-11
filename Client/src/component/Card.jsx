@@ -26,13 +26,15 @@ export default function Card({ _id, onClose, onDelete, toast, className }) {
       setData(data || []);
       setIsLoading(false);
 
-    }).catch(err => {
+      if (data.status === "failed") {
 
-      toast("error", err);
+        toast("error", data.err.toString());
+
+      }
 
     });
 
-  }, [_id, isLoading])
+  }, [_id, toast, isLoading])
 
   const { name, title, bio, phone, email, level, locked } = data;
 
@@ -57,16 +59,21 @@ export default function Card({ _id, onClose, onDelete, toast, className }) {
 
                   setUpdating(true);
 
-                  updateContact(values).then(() => {
+                  updateContact(values).then((data) => {
 
                     setUpdating(false);
                     setEditing(false);
                     setIsLoading(true);
-                    toast("success", "A contact has been updated successfully!");
 
-                  }).catch(err => {
+                    if (data.status === "failed") {
 
-                    toast("error", err);
+                      toast("error", data.err.toString());
+
+                    } else {
+
+                      toast("success", "A contact has been updated successfully!");
+
+                    }
 
                   });
 
