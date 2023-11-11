@@ -7,12 +7,12 @@ export async function getContacts(filter) {
 
     const url = `${SERVER}/contacts?filter=${filter}&key=${SERVER_KEY}`;
     const response = await axios.get(url);
-    return response.data;
+    return response.data || [];
 
   } catch (err) {
 
     console.log("Error while fetching data:", err.message);
-    return [];
+    return { status: "failed", err };
 
   }
 
@@ -29,7 +29,7 @@ export async function getContact(id) {
   } catch (err) {
 
     console.log("Error while fetching data:", err.message);
-    return {};
+    return { status: "failed", err };
 
   }
 
@@ -46,7 +46,7 @@ export async function deleteContact(id) {
   } catch (err) {
 
     console.log("Error while deleting data:", err.message);
-    return false;
+    return { status: "failed", err };
 
   }
 
@@ -63,7 +63,7 @@ export async function updateContact(body) {
   } catch (err) {
 
     console.log("Error while updating data:", err.message);
-    return false;
+    return { status: "failed", err };
 
   }
 
@@ -80,7 +80,7 @@ export async function uploadContact(body) {
   } catch (err) {
 
     console.log("Error while uploading data:", err.message);
-    return false;
+    return { status: "failed", err };
 
   }
 
